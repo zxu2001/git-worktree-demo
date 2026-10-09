@@ -5,12 +5,12 @@ function Features() {
         <section className="features" id="features" aria-labelledby="features-title">
             <div className="container">
                 <div className="section-header">
-                    <span className="section-header__badge">核心功能</span>
+                    <span className="section-header__badge">Core Features</span>
                     <h2 id="features-title" className="section-header__title">
-                        一個平台，解決所有銷售挑戰
+                        One platform for every sales challenge
                     </h2>
                     <p className="section-header__desc">
-                        從管線管理到數據分析，SalesPilot 涵蓋業務團隊日常所需的每一項功能。
+                        From pipeline management to analytics, SalesPilot covers everything your sales team needs day to day.
                     </p>
                 </div>
 

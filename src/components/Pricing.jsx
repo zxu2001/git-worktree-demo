@@ -5,12 +5,12 @@ function Pricing() {
         <section className="pricing" id="pricing" aria-labelledby="pricing-title">
             <div className="container">
                 <div className="section-header">
-                    <span className="section-header__badge">方案價格</span>
+                    <span className="section-header__badge">Pricing</span>
                     <h2 id="pricing-title" className="section-header__title">
-                        簡單透明的定價，無隱藏費用
+                        Simple, transparent pricing with no hidden fees
                     </h2>
                     <p className="section-header__desc">
-                        所有方案均含 14 天免費試用，不需信用卡。
+                        Every plan includes a 14-day free trial, no credit card required.
                     </p>
                 </div>
 

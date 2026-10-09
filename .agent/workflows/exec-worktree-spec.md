@@ -1,36 +1,36 @@
 ---
-description: 檢查當前 worktree 的 git-worktree-spec.md 是否存在，讀取後依照 spec 內容執行開發任務
+description: Check whether git-worktree-spec.md exists in the current worktree, read it, and carry out the development tasks according to the spec
 ---
 
-# 執行 Worktree Feature Spec
+# Execute the Worktree Feature Spec
 
-## 前置條件
+## Prerequisites
 
-1. 檢查當前工作目錄根目錄是否存在 `git-worktree-spec.md`
-   - 若**不存在**：告知使用者此 worktree 沒有 spec 檔案，詢問是否要手動描述需求或中止
-   - 若**存在**：繼續下一步
+1. Check whether `git-worktree-spec.md` exists in the root of the current working directory
+   - If it **does not exist**: tell the user this worktree has no spec file, and ask whether they want to describe the requirements manually or abort
+   - If it **exists**: continue to the next step
 
-## 讀取 Spec
+## Read the Spec
 
-2. 讀取 `git-worktree-spec.md` 全文內容
+2. Read the full contents of `git-worktree-spec.md`
 
-3. 解析 Spec 中的以下區塊，確認理解任務：
-   - **目標**：這個 feature 要達成什麼
-   - **實作範圍**：具體的 checklist 任務
-   - **驗收標準**：完成後需通過的條件
-   - **技術約束**：開發時的限制與慣例
-   - **跨分支備註**：是否有相依其他分支的注意事項
+3. Parse the following sections of the spec and confirm you understand the task:
+   - **Goal**: what this feature should achieve
+   - **Implementation Scope**: the concrete checklist tasks
+   - **Acceptance Criteria**: the conditions that must pass once the work is done
+   - **Technical Constraints**: limits and conventions to follow during development
+   - **Cross-Branch Notes**: anything to watch for regarding dependencies on other branches
 
-## 執行實作
+## Implement
 
-4. 依照 spec 中「實作範圍」的 checklist **逐項執行**：
-   - 每完成一項任務，更新 `git-worktree-spec.md`，將已完成的 checklist 項目打勾 `[x]`
-   - 若遇到模糊不清的任務描述，主動詢問使用者而非猜測
-   - 遵守「技術約束」中列出的所有限制
+4. Work through the "Implementation Scope" checklist in the spec **item by item**:
+   - Each time a task is finished, update `git-worktree-spec.md` and tick off the completed checklist item `[x]`
+   - If a task description is ambiguous, ask the user instead of guessing
+   - Follow every restriction listed under "Technical Constraints"
 
-## 驗收
+## Acceptance
 
-6. 實作完成後，逐項檢查「驗收標準」：
-   - 能跑測試的就跑測試
-   - 能透過 dev server 驗證的就啟動驗證
-   - 將驗收結果回報給使用者
+6. Once implementation is complete, check the "Acceptance Criteria" one by one:
+   - Run tests wherever tests can be run
+   - Start the dev server and verify wherever that is possible
+   - Report the acceptance results back to the user

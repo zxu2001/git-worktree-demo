@@ -1,27 +1,27 @@
 ---
 name: Git Smart Commit
-description: 將雜亂的 git 變更，依功能邏輯自動拆分成多個有意義的 conventional commit
+description: Automatically splits messy git changes into multiple meaningful conventional commits based on functional logic
 ---
 
-# Git Smart Commit — 智慧拆分提交
+# Git Smart Commit — Smart Commit Splitting
 
-將目前所有 staged / unstaged 變更，依功能邏輯分群後，逐批 `git add` + `git commit`。
+Groups all current staged / unstaged changes by functional logic, then runs `git add` + `git commit` batch by batch.
 
 ---
 
-## 流程
+## Workflow
 
-### 1. 檢查變更狀態
+### 1. Check the Change Status
 
-執行以下指令取得完整變更清單：
+Run the following command to get the full list of changes:
 
 ```bash
 git status --short
 ```
 
-若沒有任何變更，告知使用者「目前沒有需要提交的變更」後結束。
+If there are no changes, tell the user "There are currently no changes to commit" and stop.
 
-接著取得所有變更的 diff 內容（用來判斷分群邏輯）：
+Then get the diff of all changes (used to decide the grouping logic):
 
 ```bash
 git diff
@@ -30,114 +30,114 @@ git diff --cached
 
 ---
 
-### 2. 分析並分群
+### 2. Analyze and Group
 
-根據以下維度，將檔案變更分成多個 **commit 群組**，每組代表一個獨立的邏輯單元：
+Split the file changes into multiple **commit groups** along the dimensions below, each group representing one independent logical unit:
 
-#### 分群依據（優先順序）
+#### Grouping Criteria (in priority order)
 
-| 優先級 | 維度 | 範例 |
+| Priority | Dimension | Examples |
 |--------|------|------|
-| 1 | **專案腳手架 / 設定檔** | `package.json`, `vite.config.*`, `.gitignore`, `README.md`, `tsconfig.json` |
-| 2 | **資料層 / config data** | `src/data/*.js`, `src/constants/*`, `src/config/*` |
-| 3 | **元件（按元件名稱分組）** | `src/components/Hero.jsx` + 對應測試 + 對應樣式 |
-| 4 | **頁面 / 路由** | `src/pages/*`, `src/routes/*`, `src/App.jsx` |
-| 5 | **全域樣式** | `src/index.css`, `src/styles/*`, `src/theme/*` |
-| 6 | **工具 / hooks / 型別** | `src/utils/*`, `src/hooks/*`, `src/types/*` |
-| 7 | **測試** | `__tests__/*`, `*.test.*`, `*.spec.*` |
-| 8 | **文件 / 其他** | `docs/*`, `*.md`（非 README）, 其他雜項 |
+| 1 | **Project scaffolding / config files** | `package.json`, `vite.config.*`, `.gitignore`, `README.md`, `tsconfig.json` |
+| 2 | **Data layer / config data** | `src/data/*.js`, `src/constants/*`, `src/config/*` |
+| 3 | **Components (grouped by component name)** | `src/components/Hero.jsx` + its tests + its styles |
+| 4 | **Pages / routes** | `src/pages/*`, `src/routes/*`, `src/App.jsx` |
+| 5 | **Global styles** | `src/index.css`, `src/styles/*`, `src/theme/*` |
+| 6 | **Utilities / hooks / types** | `src/utils/*`, `src/hooks/*`, `src/types/*` |
+| 7 | **Tests** | `__tests__/*`, `*.test.*`, `*.spec.*` |
+| 8 | **Docs / other** | `docs/*`, `*.md` (other than README), other miscellaneous files |
 
-#### 分群規則
+#### Grouping Rules
 
-- **同一元件的 JSX/TSX + CSS Module + 測試 → 歸為同一組**
-- **相關的資料檔如果是為某個元件服務 → 可考慮合併或獨立**，取決於變更量
-- **若某一組只有 1 個檔案且改動極小（< 5 行）→ 合併到最相關的鄰近組**
-- **新增檔案用 `feat`，修改用 `fix` / `refactor` / `style`，刪除用 `chore`**
+- **A component's JSX/TSX + CSS Module + tests → go in the same group**
+- **Related data files that serve a specific component → may be merged or kept separate**, depending on the size of the change
+- **If a group has only 1 file and the change is tiny (< 5 lines) → merge it into the most closely related neighboring group**
+- **Use `feat` for new files, `fix` / `refactor` / `style` for modifications, and `chore` for deletions**
 
 ---
 
-### 3. 產出 Commit 計畫
+### 3. Produce the Commit Plan
 
-在執行任何 git 操作之前，先列出計畫讓使用者確認：
+Before running any git operation, list the plan so the user can confirm it:
 
 ```
-📋 Commit 計畫（共 N 個 commit）
+📋 Commit plan (N commits total)
 
-1. chore(project): 初始化專案設定與相依套件
+1. chore(project): initialize project config and dependencies
    → package.json, vite.config.js, .gitignore
 
-2. feat(data): 新增首頁各區塊的設定資料
+2. feat(data): add config data for each homepage section
    → src/data/navigation.js, src/data/hero.js, ...
 
-3. feat(navbar): 新增 Navbar 元件（含 RWD 漢堡選單）
+3. feat(navbar): add Navbar component (with responsive hamburger menu)
    → src/components/Navbar.jsx
 
 ...
 
-確認執行？(Y/n)
+Proceed? (Y/n)
 ```
 
-使用 `notify_user` 工具向使用者展示計畫並等待確認。
+Use the `notify_user` tool to show the plan to the user and wait for confirmation.
 
 ---
 
-### 4. 逐批執行 Commit
+### 4. Commit Batch by Batch
 
-使用者確認後，對每一組依序執行：
+After the user confirms, run the following for each group in order:
 
 ```bash
 git add <file1> <file2> ...
 git commit -m "<type>(<scope>): <subject>"
 ```
 
-#### Commit Message 格式
+#### Commit Message Format
 
 ```
-<type>(<scope>): <簡短描述，繁體中文>
+<type>(<scope>): <short description, in English>
 ```
 
-**type 對照表：**
+**type reference:**
 
-| type | 使用時機 |
+| type | When to use |
 |------|---------|
-| `feat` | 新增功能、元件、頁面 |
-| `fix` | 修復 bug |
-| `style` | 純樣式調整（不影響邏輯） |
-| `refactor` | 重構（不改變行為） |
-| `chore` | 雜務（設定檔、腳手架、CI） |
-| `docs` | 文件更新 |
-| `test` | 測試相關 |
+| `feat` | New feature, component, or page |
+| `fix` | Bug fix |
+| `style` | Pure styling changes (no effect on logic) |
+| `refactor` | Refactoring (no change in behavior) |
+| `chore` | Chores (config files, scaffolding, CI) |
+| `docs` | Documentation updates |
+| `test` | Test-related |
 
-**scope 規則：**
-- 元件：用元件名稱小寫，例如 `hero`, `navbar`, `pricing`
-- 資料層：`data`
-- 全域樣式：`style`
-- 專案設定：`project`
-- 多個範圍：用最主要的一個，不要用斜線串接
+**scope rules:**
+- Components: use the lowercase component name, e.g. `hero`, `navbar`, `pricing`
+- Data layer: `data`
+- Global styles: `style`
+- Project config: `project`
+- Multiple scopes: use the most significant one; do not join them with slashes
 
-**subject 規則：**
-- 使用繁體中文
-- 不超過 50 字
-- 不以句號結尾
-- 用「動詞開頭」：新增、調整、修正、移除、重構
+**subject rules:**
+- Write in English
+- No more than 50 characters
+- Do not end with a period
+- Start with a verb: add, adjust, fix, remove, refactor
 
 ---
 
-### 5. 確認結果
+### 5. Confirm the Result
 
-所有 commit 完成後，執行：
+After all commits are done, run:
 
 ```bash
 git log --oneline -20
 ```
 
-將結果展示給使用者，確認所有 commit 都已正確建立。
+Show the result to the user and confirm that every commit was created correctly.
 
 ---
 
-## 邊界情況處理
+## Edge Cases
 
-- **有衝突或 merge 狀態**：提醒使用者先解決衝突，不執行任何操作
-- **有 `.env` 或敏感檔案**：提醒使用者確認是否應被 gitignore，不自動提交
-- **變更量極大（> 50 個檔案）**：先產出分組摘要，請使用者確認後再執行
-- **使用者已有部分 staged 變更**：尊重已 staged 的狀態，將其視為一個獨立群組或合併到最相關的群組
+- **Conflicts or a merge in progress**: remind the user to resolve the conflicts first, and do not perform any operation
+- **`.env` or sensitive files present**: remind the user to confirm whether they should be gitignored, and do not commit them automatically
+- **Very large change set (> 50 files)**: produce a grouping summary first, and proceed only after the user confirms
+- **The user already has some staged changes**: respect the staged state, and treat it as its own group or merge it into the most closely related group

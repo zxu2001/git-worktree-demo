@@ -1,11 +1,11 @@
 export const HERO_CONTENT = {
-    title: '讓每一條銷售線\n都清晰可見',
-    subtitle: '整合客戶追蹤、智慧提醒與自動化流程，幫助你的業務團隊專注在成交，而非瑣事。',
+    title: 'Make every sales pipeline\ncrystal clear',
+    subtitle: 'Customer tracking, smart reminders, and automated workflows in one place, so your sales team can focus on closing deals instead of busywork.',
     stats: [
-        { value: '37%', label: '平均成交率提升' },
-        { value: '2.4x', label: '業務效率倍增' },
-        { value: '60%', label: '跟進遺漏減少' },
+        { value: '37%', label: 'Average win rate increase' },
+        { value: '2.4x', label: 'Sales productivity gain' },
+        { value: '60%', label: 'Fewer missed follow-ups' },
     ],
-    primaryCta: { label: '預約 Demo', href: '#demo' },
-    secondaryCta: { label: '查看方案', href: '#pricing' },
+    primaryCta: { label: 'Book a Demo', href: '#demo' },
+    secondaryCta: { label: 'View Plans', href: '#pricing' },
 };

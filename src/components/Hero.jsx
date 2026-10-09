@@ -31,7 +31,7 @@ function Hero() {
                         </a>
                     </div>
 
-                    <div className="hero__stats" role="list" aria-label="關鍵成效數據">
+                    <div className="hero__stats" role="list" aria-label="Key performance stats">
                         {stats.map((stat) => (
                             <div key={stat.label} className="hero__stat" role="listitem">
                                 <span className="hero__stat-value">{stat.value}</span>
@@ -58,22 +58,22 @@ function Hero() {
                             <div className="hero__mockup-content">
                                 <div className="hero__mockup-pipeline">
                                     <div className="hero__mockup-col">
-                                        <div className="hero__mockup-col-header">初步接觸</div>
+                                        <div className="hero__mockup-col-header">First Contact</div>
                                         <div className="hero__mockup-card hero__mockup-card--blue" />
                                         <div className="hero__mockup-card hero__mockup-card--blue" />
                                     </div>
                                     <div className="hero__mockup-col">
-                                        <div className="hero__mockup-col-header">需求確認</div>
+                                        <div className="hero__mockup-col-header">Qualification</div>
                                         <div className="hero__mockup-card hero__mockup-card--purple" />
                                     </div>
                                     <div className="hero__mockup-col">
-                                        <div className="hero__mockup-col-header">報價中</div>
+                                        <div className="hero__mockup-col-header">Quoting</div>
                                         <div className="hero__mockup-card hero__mockup-card--amber" />
                                         <div className="hero__mockup-card hero__mockup-card--amber" />
                                         <div className="hero__mockup-card hero__mockup-card--amber" />
                                     </div>
                                     <div className="hero__mockup-col">
-                                        <div className="hero__mockup-col-header">成交 🎉</div>
+                                        <div className="hero__mockup-col-header">Closed Won 🎉</div>
                                         <div className="hero__mockup-card hero__mockup-card--green" />
                                     </div>
                                 </div>

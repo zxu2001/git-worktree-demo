@@ -1,62 +1,62 @@
 # PR Description Template
 
-以下為 PR Description 的標準模板，產生內容時依照此結構填寫。
+This is the standard template for a PR Description. Fill it in following this structure when generating content.
 
 ---
 
-## 🎯 為什麼要這樣做
+## 🎯 Why This Change
 
-<!-- 簡述背景與動機 -->
+<!-- Briefly describe the background and motivation -->
 
 
-## ⚠️ 修改的內容
+## ⚠️ What Changed
 
 <!-- 
-依功能或需求分組，每組列出：修改方向、具體內容
-規則：
-- 禁止任何 Markdown 連結格式：[文字](...)
-- 禁止任何 URI / scheme：比如 file://、cci:
-- 禁止出現任何檔案路徑（包含相對路徑），一律改用純功能描述
+Group by feature or requirement. For each group list: the direction of the change and the specific details
+Rules:
+- No Markdown link syntax of any kind: [text](...)
+- No URIs / schemes of any kind, e.g. file://, cci:
+- No file paths of any kind (including relative paths); always use a plain functional description instead
 -->
 
-### [功能名稱 / 需求項目]
-- **修改方向**：簡述調整目的 (例如：優化效能、修復邏輯錯誤、調整樣式)
-- **內容**：
-  - 具體修改點 1（純功能描述）
-  - 具體修改點 2（純功能描述）
+### [Feature Name / Requirement]
+- **Direction**: briefly state the purpose of the change (e.g. improve performance, fix a logic error, adjust styling)
+- **Details**:
+  - Specific change 1 (plain functional description)
+  - Specific change 2 (plain functional description)
 
-### [另一個功能名稱]
-- **修改方向**：...
-- **內容**：
+### [Another Feature Name]
+- **Direction**: ...
+- **Details**:
   - ...
 
 
-## 🧪 測試步驟
+## 🧪 Test Steps
 
 <!-- 
-  規則：
-  - 必須為「修改的內容」中的每一個模組 / 元件都產生至少一個對應的測試案例
-  - 確保所有變更皆被涵蓋，不可遺漏
+  Rules:
+  - At least one corresponding test case must be produced for every module / component under "What Changed"
+  - Make sure every change is covered; nothing may be left out
   
-  每個測試案例需包含：
-  1. 明確的測試情境名稱（標註對應的模組 / 元件）
-  2. 操作步驟（step by step）
-  3. 預期結果
+  Each test case must include:
+  1. A clear test scenario name (noting the corresponding module / component)
+  2. Steps to perform (step by step)
+  3. Expected result
   
-  若為前端專案，需搭配截圖示意
+  For front-end projects, include screenshots as illustration
 -->
 
-### 測試案例 1：[模組 A 的測試情境]
+### Test Case 1: [Test scenario for module A]
 
-1. 步驟一
-2. 步驟二
-3. **預期結果**：描述預期的行為或畫面
+1. Step one
+2. Step two
+3. **Expected result**: describe the expected behavior or screen
 
-### 測試案例 2：[模組 B 的測試情境]
+### Test Case 2: [Test scenario for module B]
 
-1. 步驟一
-2. 步驟二
-3. **預期結果**：描述預期的行為或畫面
+1. Step one
+2. Step two
+3. **Expected result**: describe the expected behavior or screen
 
-### 測試案例 N：[依此類推，直到所有變更模組皆有對應測試]
+### Test Case N: [And so on, until every changed module has a corresponding test]
 

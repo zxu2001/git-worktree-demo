@@ -1,250 +1,250 @@
 ---
 name: Git Worktree Design
-description: 當使用者的需求是新增多個功能，或判斷使用者的需求適合拆分成多個 feature branch 並行開發時，或是提到 "worktree"、"git worktree"、"多分支開發"、"parallel branches"，自動觸發此 Skill。先分析需求並建議 worktree 拆分方案，經使用者確認後執行建立。
+description: This Skill is triggered automatically when the user's request is to add multiple features, when the request looks suitable for splitting into multiple feature branches developed in parallel, or when the user mentions "worktree", "git worktree", "multi-branch development", or "parallel branches". It first analyzes the requirements and proposes a worktree split, then creates the worktrees once the user confirms.
 ---
 
-# Git Worktree Design — 智慧拆分平行開發
+# Git Worktree Design — Smart Splitting for Parallel Development
 
-分析使用者需求，判斷是否適合以 `git worktree` 拆分成多個 feature branch 平行開發，提供建議方案並執行。
+Analyzes the user's requirements, decides whether they are suited to being split into multiple feature branches developed in parallel with `git worktree`, proposes a plan, and carries it out.
 
 ---
 
-## 流程
+## Workflow
 
-### 1. 分析當前狀態
+### 1. Analyze the Current State
 
-執行以下指令了解 repo 狀態：
+Run the following commands to understand the state of the repo:
 
 ```bash
-# 確認當前分支
+# Confirm the current branch
 git branch --show-current
 
-# 列出既有 worktree
+# List existing worktrees
 git worktree list
 
-# 取得 remote 資訊
+# Get remote information
 git remote -v
 
-# 確認工作目錄狀態
+# Check the working directory status
 git status --short
 ```
 
-若有未提交的變更，提醒使用者先處理（commit 或 stash）再繼續。
+If there are uncommitted changes, remind the user to deal with them first (commit or stash) before continuing.
 
 ---
 
-### 2. 全局設計（拆分方案 + Feature Spec）
+### 2. Overall Design (Split Plan + Feature Specs)
 
-在建立任何 worktree 之前，先從全局視角完成所有 feature 的設計。這一步同時產出 **拆分方案** 和每個 feature 的 **Spec 草案**，讓使用者一次 review 整體規劃。
+Before creating any worktree, design all the features from a whole-project perspective. This step produces both the **split plan** and a **draft Spec** for each feature, so the user can review the overall plan in one pass.
 
-#### 2a. 需求拆分
+#### 2a. Split the Requirements
 
-根據使用者需求，分析並拆分成多個獨立的 feature branch。
+Based on the user's requirements, analyze and split the work into multiple independent feature branches.
 
-**拆分原則：**
+**Splitting principles:**
 
-| 原則 | 說明 |
+| Principle | Description |
 |------|------|
-| **功能獨立性** | 每個 worktree 負責一個獨立功能，減少跨分支衝突 |
-| **最小相依** | 盡量避免分支間互相依賴，可獨立開發與測試 |
-| **合理粒度** | 不宜太細（增加管理負擔），不宜太粗（失去平行開發優勢） |
-| **命名語意** | 分支名清楚描述功能，格式 `feature/<功能名>` |
+| **Functional independence** | Each worktree owns one independent feature, reducing cross-branch conflicts |
+| **Minimal dependencies** | Avoid dependencies between branches as much as possible, so each can be developed and tested independently |
+| **Reasonable granularity** | Not too fine (adds management overhead) and not too coarse (loses the benefit of parallel development) |
+| **Meaningful naming** | Branch names clearly describe the feature, in the format `feature/<feature-name>` |
 
-#### 2b. 設計各 Feature Spec
+#### 2b. Design Each Feature Spec
 
-針對每個拆分出來的 feature，根據使用者的原始需求和專案現況，**自動推導**出完整的 Spec 內容（不是丟空白範本）。
+For each feature that comes out of the split, **automatically derive** the full Spec content from the user's original requirements and the current state of the project (do not hand over a blank template).
 
-**每份 Spec 應包含：**
+**Each Spec should include:**
 
-| 區塊 | 說明 |
+| Section | Description |
 |------|------|
-| **目標** | 這個 feature branch 要達成什麼 |
-| **實作範圍** | 具體的任務 checklist，粒度到 AI 看了就能直接動手 |
-| **驗收標準** | 可測試的行為或 UI 狀態描述 |
-| **技術約束** | 專案慣例、不可引入的依賴、需相容的介面等 |
-| **跨分支備註** | 與其他 feature 的相依關係、建議合併順序等 |
+| **Goal** | What this feature branch should achieve |
+| **Implementation Scope** | A concrete task checklist, detailed enough that an AI can start working from it directly |
+| **Acceptance Criteria** | Testable descriptions of behavior or UI state |
+| **Technical Constraints** | Project conventions, dependencies that must not be introduced, interfaces that must stay compatible, etc. |
+| **Cross-Branch Notes** | Dependencies on other features, suggested merge order, etc. |
 
-> **重點**：在全局設計階段就考慮跨分支相依，例如 feature A 產出的共用元件是否影響 feature B，合併順序是否有先後。
+> **Key point**: consider cross-branch dependencies during the overall design stage, for example whether a shared component produced by feature A affects feature B, and whether the merge order matters.
 
-#### 2c. 呈現完整方案給使用者
+#### 2c. Present the Full Plan to the User
 
-以表格 + 各 feature spec 摘要的形式向使用者呈現**完整方案**：
+Present the **full plan** to the user as a table plus a spec summary for each feature:
 
 ```
-📋 Worktree 拆分方案（共 N 個分支）
+📋 Worktree split plan (N branches total)
 
-| # | 分支名稱 | Worktree 目錄 | 負責功能 |
+| # | Branch name | Worktree directory | Feature |
 |---|----------|---------------|----------|
-| 1 | feature/hero-redesign | ../project-hero | Hero 區塊重新設計 |
-| 2 | feature/pricing-page | ../project-pricing | 定價頁面 |
-| 3 | feature/testimonials | ../project-testimonials | 用戶見證區塊 |
+| 1 | feature/hero-redesign | ../project-hero | Hero section redesign |
+| 2 | feature/pricing-page | ../project-pricing | Pricing page |
+| 3 | feature/testimonials | ../project-testimonials | Customer testimonials section |
 
 ---
 
-📝 Feature Spec 摘要：
+📝 Feature Spec summary:
 
 ### 1. feature/hero-redesign
-- 目標：重新設計 Hero 區塊，加入動態背景與 CTA
-- 驗收：首屏載入 < 2s，CTA 按鈕可點擊跳轉
-- 相依：無，可獨立開發
+- Goal: redesign the Hero section with an animated background and CTA
+- Acceptance: above-the-fold load < 2s, CTA button is clickable and navigates
+- Dependencies: none, can be developed independently
 
 ### 2. feature/pricing-page
-- 目標：新增月/年切換的定價頁面
-- 驗收：切換月/年時價格正確更新，手機版排版正常
-- 相依：無，可獨立開發
+- Goal: add a pricing page with a monthly/yearly toggle
+- Acceptance: prices update correctly when toggling monthly/yearly, mobile layout renders properly
+- Dependencies: none, can be developed independently
 
 ### 3. feature/testimonials
-- 目標：新增用戶見證輪播區塊
-- 驗收：輪播自動播放，手動切換無 bug
-- 相依：無，可獨立開發
+- Goal: add a customer testimonials carousel section
+- Acceptance: carousel autoplays, manual switching has no bugs
+- Dependencies: none, can be developed independently
 
 ---
 
-建議合併順序：1 → 2 → 3（無強制相依，可任意順序）
+Suggested merge order: 1 → 2 → 3 (no hard dependencies, any order works)
 
-確認執行？(Y/n)
+Proceed? (Y/n)
 ```
 
-使用 `notify_user` 工具向使用者展示完整方案（拆分 + Spec 摘要）並等待確認。
+Use the `notify_user` tool to show the user the full plan (split + Spec summary) and wait for confirmation.
 
 ---
 
-### 3. 建立 Worktree
+### 3. Create the Worktrees
 
-使用者確認後，依序執行：
+After the user confirms, run in order:
 
 ```bash
-# 建立各 worktree（新分支）
+# Create each worktree (new branch)
 git worktree add -b <branch_name> <worktree_path>
 ```
 
-#### Worktree 目錄命名規則
+#### Worktree Directory Naming Rules
 
-- 目錄放在當前 repo 的**同層級**（`../`）
-- 格式：`../<project-name>-<feature-short-name>`
-- 取 repo 目錄名作為 `<project-name>` 前綴，避免與其他專案混淆
+- Put the directories at the **same level** as the current repo (`../`)
+- Format: `../<project-name>-<feature-short-name>`
+- Use the repo directory name as the `<project-name>` prefix to avoid confusion with other projects
 
 ---
 
-### 4. 安裝依賴
+### 4. Install Dependencies
 
-偵測專案使用的套件管理器並安裝依賴：
+Detect the package manager the project uses and install dependencies:
 
 ```bash
-# 偵測 lock file 判斷套件管理器
+# Detect the lock file to determine the package manager
 # pnpm-lock.yaml → pnpm install
 # yarn.lock → yarn install
 # package-lock.json → npm install
 # bun.lockb → bun install
 ```
 
-對每個 worktree 執行：
+Run for each worktree:
 
 ```bash
 cd <worktree_path> && <package_manager> install
 ```
 
-> **注意**：每個 worktree 有獨立的工作目錄，`node_modules` 不會共享，必須各自安裝。
+> **Note**: each worktree has its own working directory and `node_modules` is not shared, so dependencies must be installed in each one separately.
 
 ---
 
-### 5. 寫入 Feature Spec 檔案
+### 5. Write the Feature Spec Files
 
-將步驟 2 設計好的 Spec 內容，使用 `write_to_file` 工具寫入到每個 worktree 的根目錄 `<worktree_path>/git-worktree-spec.md`。
+Use the `write_to_file` tool to write the Spec content designed in step 2 to the root of each worktree at `<worktree_path>/git-worktree-spec.md`.
 
-#### Spec 檔案格式
+#### Spec File Format
 
 ```markdown
-# Feature Spec: <功能名稱>
+# Feature Spec: <feature name>
 
-> 此文件由 Git Worktree Design Skill 自動產生，供 AI Agent 作為開發指引。
+> This file was generated automatically by the Git Worktree Design Skill as a development guide for the AI Agent.
 
-## 分支資訊
+## Branch Information
 
-| 項目 | 值 |
+| Item | Value |
 |------|-----|
-| 分支名稱 | `feature/<name>` |
-| 基於分支 | `<base_branch>` |
-| Worktree 路徑 | `<absolute_path>` |
-| 建立時間 | `<timestamp>` |
+| Branch name | `feature/<name>` |
+| Base branch | `<base_branch>` |
+| Worktree path | `<absolute_path>` |
+| Created at | `<timestamp>` |
 
-## 目標
+## Goal
 
-（從步驟 2 的設計內容填入）
+(Fill in from the design content of step 2)
 
-## 實作範圍
+## Implementation Scope
 
-- [ ] 具體任務 1
-- [ ] 具體任務 2
-- [ ] 具體任務 3
+- [ ] Concrete task 1
+- [ ] Concrete task 2
+- [ ] Concrete task 3
 
-## 驗收標準
+## Acceptance Criteria
 
-- 條件 A 成立時，應有行為 X
-- 條件 B 成立時，應有行為 Y
+- When condition A holds, behavior X should occur
+- When condition B holds, behavior Y should occur
 
-## 技術約束
+## Technical Constraints
 
-- 不得引入新的 npm 依賴（視情況填寫）
-- 需相容既有的設計系統 / API 介面
-## 跨分支備註
+- No new npm dependencies may be introduced (fill in as applicable)
+- Must stay compatible with the existing design system / API interfaces
+## Cross-Branch Notes
 
-與其他 worktree 分支的相依關係、合併順序建議等。
+Dependencies on other worktree branches, suggested merge order, etc.
 ```
 
 ---
 
-### 6. 確認結果
+### 6. Confirm the Result
 
-所有 worktree 建立完成後，執行：
+After all worktrees have been created, run:
 
 ```bash
 git worktree list
 ```
 
-以表格形式展示結果：
+Show the result as a table:
 
 ```
-✅ Worktree 建立完成！
+✅ Worktrees created!
 
-| Worktree 目錄 | 分支 | 狀態 | Spec |
+| Worktree directory | Branch | Status | Spec |
 |---------------|------|------|------|
-| /path/to/project-hero | feature/hero-redesign | ✅ 就緒 | ✅ 已寫入 |
-| /path/to/project-pricing | feature/pricing-page | ✅ 就緒 | ✅ 已寫入 |
-| /path/to/project-testimonials | feature/testimonials | ✅ 就緒 | ✅ 已寫入 |
+| /path/to/project-hero | feature/hero-redesign | ✅ Ready | ✅ Written |
+| /path/to/project-pricing | feature/pricing-page | ✅ Ready | ✅ Written |
+| /path/to/project-testimonials | feature/testimonials | ✅ Ready | ✅ Written |
 
-💡 提示：
-- 切換工作目錄到對應 worktree 即可開始開發
-- 所有 worktree 共享同一個 .git，commit 歷史互通
+💡 Tips:
+- Switch your working directory to the corresponding worktree to start developing
+- All worktrees share the same .git, so commit history is shared between them
 ```
 
 ---
 
-## 邊界情況處理
+## Edge Cases
 
-- **分支已存在**：偵測到分支已存在時，改用不帶 `-b` 的指令（`git worktree add <path> <existing-branch>`），並提示使用者確認
-- **目錄已存在**：提示衝突並建議替代目錄名
-- **有未提交變更**：提醒先 commit 或 stash
-- **遠端分支同步**：建議先 `git fetch` 取得最新遠端狀態
-- **Worktree 清理**：提醒使用者開發完成後用 `git worktree remove` 和 `git branch -d` 清理
+- **Branch already exists**: when an existing branch is detected, use the command without `-b` (`git worktree add <path> <existing-branch>`) and prompt the user to confirm
+- **Directory already exists**: report the conflict and suggest an alternative directory name
+- **Uncommitted changes**: remind the user to commit or stash first
+- **Remote branch sync**: recommend running `git fetch` first to get the latest remote state
+- **Worktree cleanup**: remind the user to clean up with `git worktree remove` and `git branch -d` once development is finished
 
 ---
 
-## 常用維護指令
+## Common Maintenance Commands
 
 ```bash
-# 列出所有 worktree
+# List all worktrees
 git worktree list
 
-# 移除 worktree（保留分支）
+# Remove a worktree (keeps the branch)
 git worktree remove <path>
 
-# 強制移除（有未提交變更時）
+# Force removal (when there are uncommitted changes)
 git worktree remove --force <path>
 
-# 清理失效的 worktree 參照
+# Prune stale worktree references
 git worktree prune
 
-# 刪除分支（合併後）
+# Delete a branch (after merging)
 git branch -d <branch_name>
 ```

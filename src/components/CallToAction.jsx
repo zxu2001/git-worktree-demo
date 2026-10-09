@@ -4,17 +4,17 @@ function CallToAction() {
             <div className="cta-banner__bg" aria-hidden="true" />
             <div className="container cta-banner__inner">
                 <h2 id="cta-title" className="cta-banner__title">
-                    準備好提升你的業務效率了嗎？
+                    Ready to boost your sales productivity?
                 </h2>
                 <p className="cta-banner__desc">
-                    加入超過 500 家企業的行列，用 SalesPilot 讓你的銷售團隊如虎添翼。14 天免費試用，不需信用卡。
+                    Join more than 500 companies using SalesPilot to supercharge their sales teams. 14-day free trial, no credit card required.
                 </p>
                 <div className="cta-banner__actions">
                     <a href="#demo" className="btn btn--white btn--lg">
-                        立即預約 Demo
+                        Book a Demo Now
                     </a>
                     <a href="#pricing" className="btn btn--outline-white btn--lg">
-                        查看方案比較
+                        Compare Plans
                     </a>
                 </div>
             </div>

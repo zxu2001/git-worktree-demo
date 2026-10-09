@@ -10,7 +10,7 @@ function SocialProof() {
                     {heading}
                 </p>
 
-                <div className="social-proof__logos" role="list" aria-label="客戶企業列表">
+                <div className="social-proof__logos" role="list" aria-label="Customer companies">
                     {logos.map((logo) => (
                         <div key={logo.id} className="social-proof__logo" role="listitem">
                             <div className="social-proof__logo-placeholder" aria-label={logo.name}>
@@ -21,7 +21,7 @@ function SocialProof() {
                 </div>
 
                 <blockquote className="social-proof__testimonial">
-                    <p className="social-proof__quote">「{testimonial.quote}」</p>
+                    <p className="social-proof__quote">“{testimonial.quote}”</p>
                     <footer className="social-proof__author">
                         <div className="social-proof__avatar" aria-hidden="true">
                             {testimonial.author.charAt(0)}
@@ -29,7 +29,7 @@ function SocialProof() {
                         <div>
                             <cite className="social-proof__name">{testimonial.author}</cite>
                             <span className="social-proof__role">
-                                {testimonial.role}，{testimonial.company}
+                                {testimonial.role}, {testimonial.company}
                             </span>
                         </div>
                     </footer>

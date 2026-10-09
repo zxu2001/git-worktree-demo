@@ -5,9 +5,9 @@ function UseCases() {
         <section className="use-cases" id="use-cases" aria-labelledby="use-cases-title">
             <div className="container">
                 <div className="section-header">
-                    <span className="section-header__badge">應用場景</span>
+                    <span className="section-header__badge">Use Cases</span>
                     <h2 id="use-cases-title" className="section-header__title">
-                        無論你的角色，SalesPilot 都能助你一臂之力
+                        Whatever your role, SalesPilot has your back
                     </h2>
                 </div>
 
